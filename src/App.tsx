@@ -4,13 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AuthProvider } from "./contexts/AuthContext";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AppLayout } from "./components/AppLayout";
-import Landing from "./pages/Landing";
-import Auth from "./pages/Auth";
-import TravelerDashboard from "./pages/TravelerDashboard";
-import OfficialDashboard from "./pages/OfficialDashboard";
+import Dashboard from "./pages/Dashboard";
 import TripPlanner from "./pages/TripPlanner";
 import Itinerary from "./pages/Itinerary";
 import Rides from "./pages/Rides";
@@ -28,97 +23,21 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/auth" element={<Auth />} />
-            
-            {/* Protected Traveler Routes */}
-            <Route path="/traveler" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <TravelerDashboard />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/trip-planner" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <TripPlanner />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/itinerary" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <Itinerary />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/rides" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <Rides />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/food" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <Food />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/safety" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <Safety />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <Profile />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            <Route path="/trip-logger" element={
-              <ProtectedRoute requiredRole="traveler">
-                <SidebarProvider>
-                  <AppLayout>
-                    <TripLogger />
-                  </AppLayout>
-                </SidebarProvider>
-              </ProtectedRoute>
-            } />
-            
-            {/* Protected Official Route */}
-            <Route path="/official" element={
-              <ProtectedRoute requiredRole="official">
-                <OfficialDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* 404 Route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
+        <SidebarProvider>
+          <AppLayout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/trip-planner" element={<TripPlanner />} />
+              <Route path="/itinerary" element={<Itinerary />} />
+              <Route path="/rides" element={<Rides />} />
+              <Route path="/food" element={<Food />} />
+              <Route path="/safety" element={<Safety />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/trip-logger" element={<TripLogger />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AppLayout>
+        </SidebarProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
