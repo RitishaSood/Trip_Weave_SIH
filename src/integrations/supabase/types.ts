@@ -14,7 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      consents: {
+        Row: {
+          consent_text: string
+          granted_at: string | null
+          id: string
+          revoked_at: string | null
+          user_id: string | null
+          version: string
+        }
+        Insert: {
+          consent_text: string
+          granted_at?: string | null
+          id?: string
+          revoked_at?: string | null
+          user_id?: string | null
+          version: string
+        }
+        Update: {
+          consent_text?: string
+          granted_at?: string | null
+          id?: string
+          revoked_at?: string | null
+          user_id?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          full_name: string | null
+          id: string
+          role: string
+        }
+        Insert: {
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          role: string
+        }
+        Update: {
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      trip_points: {
+        Row: {
+          accuracy_m: number | null
+          id: string
+          lat: number | null
+          lng: number | null
+          recorded_at: string | null
+          speed_m_s: number | null
+          trip_id: string | null
+        }
+        Insert: {
+          accuracy_m?: number | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          recorded_at?: string | null
+          speed_m_s?: number | null
+          trip_id?: string | null
+        }
+        Update: {
+          accuracy_m?: number | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          recorded_at?: string | null
+          speed_m_s?: number | null
+          trip_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_points_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trips: {
+        Row: {
+          companions: Json | null
+          consent_id: string | null
+          created_at: string | null
+          destination: string | null
+          end_time: string | null
+          id: string
+          mode: string | null
+          origin: string | null
+          start_time: string | null
+          trip_number: number
+          user_id: string | null
+        }
+        Insert: {
+          companions?: Json | null
+          consent_id?: string | null
+          created_at?: string | null
+          destination?: string | null
+          end_time?: string | null
+          id?: string
+          mode?: string | null
+          origin?: string | null
+          start_time?: string | null
+          trip_number?: number
+          user_id?: string | null
+        }
+        Update: {
+          companions?: Json | null
+          consent_id?: string | null
+          created_at?: string | null
+          destination?: string | null
+          end_time?: string | null
+          id?: string
+          mode?: string | null
+          origin?: string | null
+          start_time?: string | null
+          trip_number?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trips_consent_id_fkey"
+            columns: ["consent_id"]
+            isOneToOne: false
+            referencedRelation: "consents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
