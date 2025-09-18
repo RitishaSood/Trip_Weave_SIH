@@ -2,60 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TripWeave Design System - Travel Planning App
-All colors MUST be HSL. Based on provided color palette.
+/* TripWeave Design System - Santorini-Inspired Travel App
+All colors MUST be HSL. Based on beautiful Santorini color palette.
 */
 
 @layer base {
   :root {
-    /* TripWeave Brand Colors */
-    --primary: 184 85% 32%;         /* #0EA098 - Primary actions, call-to-actions */
+    /* Santorini-Inspired Brand Colors */
+    --primary: 195 95% 25%;         /* #03607E - Deep ocean blue for primary actions */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 184 85% 42%;    /* Lighter version for effects */
+    --primary-glow: 203 41% 69%;    /* #90B6D1 - Light blue for effects */
     
-    --secondary: 201 42% 30%;       /* #02636D - Accents, buttons */
+    --secondary: 195 93% 15%;       /* #04384B - Darker teal for accents */
     --secondary-foreground: 0 0% 100%;
     
-    --accent: 58 84% 22%;           /* #63610C - Alerts, highlights */
-    --accent-foreground: 0 0% 100%;
+    --accent: 28 48% 82%;           /* #E7C9AF - Warm peachy beige for highlights */
+    --accent-foreground: 195 95% 25%;
     
-    --header: 204 18% 34%;          /* #46616E - Headers, text highlights */
+    --header: 195 95% 25%;          /* #03607E - Ocean blue for headers */
     --header-foreground: 0 0% 100%;
     
-    --surface: 17 6% 76%;           /* #C4B6B6 - Backgrounds, cards */
-    --surface-foreground: 0 0% 15%;
+    --surface: 32 33% 90%;          /* #EEE0D7 - Cream for card backgrounds */
+    --surface-foreground: 195 93% 15%;
     
     /* App Layout Colors */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 15%;
+    --background: 32 33% 95%;
+    --foreground: 195 93% 15%;
     
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --card-foreground: 195 93% 15%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --popover-foreground: 195 93% 15%;
     
-    --muted: 17 6% 92%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 32 33% 88%;
+    --muted-foreground: 195 50% 35%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 17 6% 85%;
-    --input: 17 6% 85%;
-    --ring: 184 85% 32%;
+    --border: 28 25% 80%;
+    --input: 28 25% 80%;
+    --ring: 195 95% 25%;
     
     --radius: 0.75rem;
     
     /* Sidebar Colors */
-    --sidebar-background: 204 18% 34%;      /* Header color for sidebar */
+    --sidebar-background: 195 95% 25%;      /* Ocean blue for sidebar */
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 184 85% 32%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 204 18% 40%;
+    --sidebar-primary: 203 41% 69%;
+    --sidebar-primary-foreground: 195 95% 25%;
+    --sidebar-accent: 195 95% 30%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 204 18% 30%;
-    --sidebar-ring: 184 85% 32%;
+    --sidebar-border: 195 95% 20%;
+    --sidebar-ring: 203 41% 69%;
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
@@ -73,16 +73,16 @@ All colors MUST be HSL. Based on provided color palette.
   }
 
   .dark {
-    --background: 204 18% 8%;
-    --foreground: 0 0% 95%;
-    --card: 204 18% 12%;
-    --card-foreground: 0 0% 95%;
-    --surface: 204 18% 18%;
-    --surface-foreground: 0 0% 85%;
-    --muted: 204 18% 15%;
-    --muted-foreground: 0 0% 65%;
-    --border: 204 18% 20%;
-    --input: 204 18% 20%;
+    --background: 195 93% 8%;
+    --foreground: 32 33% 95%;
+    --card: 195 93% 12%;
+    --card-foreground: 32 33% 95%;
+    --surface: 195 93% 18%;
+    --surface-foreground: 32 33% 85%;
+    --muted: 195 93% 15%;
+    --muted-foreground: 203 41% 65%;
+    --border: 195 93% 20%;
+    --input: 195 93% 20%;
   }
 }
 
