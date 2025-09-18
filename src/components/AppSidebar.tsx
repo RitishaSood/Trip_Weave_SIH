@@ -71,13 +71,13 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                     <NavLink 
+                    <NavLink 
                       to={item.url} 
                       className={({ isActive: active }) => `
-                        flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 group
+                        flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
                         ${active || isActive(item.url)
-                          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-lg shadow-sidebar-accent/20 border border-sidebar-accent/30' 
-                          : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/20 hover:text-sidebar-foreground hover:shadow-md hover:shadow-sidebar-accent/10'
+                          ? 'bg-sidebar-accent text-sidebar-primary font-medium shadow-sm' 
+                          : 'text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-primary'
                         }
                         ${state === "collapsed" ? 'justify-center' : ''}
                       `}
