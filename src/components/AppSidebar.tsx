@@ -7,7 +7,8 @@ import {
   Shield, 
   User, 
   ClipboardList,
-  Plane
+  Plane,
+  LogOut
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -21,9 +22,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
-const menuItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+const travelerMenuItems = [
+  { title: "Dashboard", url: "/traveler/dashboard", icon: LayoutDashboard },
   { title: "Trip Planner", url: "/trip-planner", icon: MapPin },
   { title: "Itinerary", url: "/itinerary", icon: Route },
   { title: "Rides", url: "/rides", icon: Car },
@@ -33,15 +36,31 @@ const menuItems = [
   { title: "Trip Logger", url: "/trip-logger", icon: ClipboardList },
 ];
 
+const officialMenuItems = [
+  { title: "Dashboard", url: "/official/dashboard", icon: LayoutDashboard },
+  { title: "Profile", url: "/profile", icon: User },
+];
+
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const { profile, signOut } = useAuth();
   
   const isActive = (path: string) => {
-    if (path === "/") {
-      return location.pathname === "/";
+    if (path.includes("dashboard")) {
+      return location.pathname === path;
     }
     return location.pathname.startsWith(path);
+  };
+
+  const menuItems = profile?.role === 'traveler' ? travelerMenuItems : officialMenuItems;
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -91,6 +110,21 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Logout Section */}
+        <div className="mt-auto p-2">
+          <Button
+            variant="ghost"
+            onClick={handleSignOut}
+            className={`
+              w-full flex items-center gap-3 px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-primary transition-all duration-200
+              ${state === "collapsed" ? 'justify-center' : 'justify-start'}
+            `}
+          >
+            <LogOut className={`${state === "collapsed" ? 'w-5 h-5' : 'w-4 h-4'} flex-shrink-0`} />
+            {state !== "collapsed" && <span className="text-sm">Sign Out</span>}
+          </Button>
+        </div>
       </SidebarContent>
     </Sidebar>
   );
