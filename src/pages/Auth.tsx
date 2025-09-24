@@ -12,6 +12,7 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
   
@@ -27,7 +28,7 @@ export default function Auth() {
 
     try {
       if (activeTab === 'signin') {
-        await signIn(email, password);
+        await signIn(email, password, name);
         // Navigate based on email - if contains 'official', go to official dashboard
         const role = email.includes('official') ? 'official' : 'traveler';
         navigate(role === 'official' ? '/official/dashboard' : '/traveler/dashboard');
@@ -35,7 +36,7 @@ export default function Auth() {
         if (password !== confirmPassword) {
           throw new Error('Passwords do not match');
         }
-        await signUp(email, password, selectedRole);
+        await signUp(email, password, selectedRole, name);
         // Navigate based on selected role
         navigate(selectedRole === 'official' ? '/official/dashboard' : '/traveler/dashboard');
       }
@@ -108,6 +109,18 @@ export default function Auth() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <TabsContent value="signin" className="space-y-4 mt-0">
                   <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Enter your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="bg-background/50"
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
@@ -134,6 +147,18 @@ export default function Auth() {
                 </TabsContent>
                 
                 <TabsContent value="signup" className="space-y-4 mt-0">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name">Name</Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      placeholder="Enter your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="bg-background/50"
+                    />
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input

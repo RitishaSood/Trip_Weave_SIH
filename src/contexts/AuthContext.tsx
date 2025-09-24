@@ -19,8 +19,8 @@ interface AuthContextType {
   user: DemoUser | null;
   profile: Profile | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, role: 'traveler' | 'official') => Promise<void>;
+  signIn: (email: string, password: string, name?: string) => Promise<void>;
+  signUp: (email: string, password: string, role: 'traveler' | 'official', name?: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<void>;
 }
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, name?: string) => {
     // Demo authentication - always succeeds with demo user
     const demoUser: DemoUser = {
       id: 'demo-user-' + Date.now(),
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: demoUser.id,
       email: email,
       role: role,
-      full_name: `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
+      full_name: name || `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
     };
 
     setUser(demoUser);
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     toast.success('Successfully signed in!');
   };
 
-  const signUp = async (email: string, password: string, role: 'traveler' | 'official') => {
+  const signUp = async (email: string, password: string, role: 'traveler' | 'official', name?: string) => {
     // Demo signup - create demo user with specified role
     const demoUser: DemoUser = {
       id: 'demo-user-' + Date.now(),
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: demoUser.id,
       email: email,
       role: role,
-      full_name: `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
+      full_name: name || `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
     };
 
     setUser(demoUser);
