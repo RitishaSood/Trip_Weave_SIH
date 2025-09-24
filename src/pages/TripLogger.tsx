@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-
+import CaptureButton from "@/components/CaptureButton";
 export default function TripLogger() {
   const [tripState, setTripState] = useState<"planning" | "inProgress" | "completed">("planning");
   const [tripId, setTripId] = useState<string | null>(null);
@@ -102,91 +102,229 @@ export default function TripLogger() {
   };
 
   // ---------------- UI ----------------
-  return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-center text-blue-600">Travel Expense Tracker</h1>
+ return (
+  <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <h1 className="text-3xl font-bold text-center text-blue-600">
+      Travel Expense Tracker
+    </h1>
 
-      {/* Step 1: Planning */}
-      {tripState === "planning" && (
+    {/* Step 1: Planning */}
+    {tripState === "planning" && (
+      <Card className="p-6">
+        <h2 className="text-xl font-semibold mb-4">Trip Details</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label>From</Label>
+            <Input
+              name="from"
+              value={tripForm.from}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>To</Label>
+            <Input
+              name="destination"
+              value={tripForm.destination}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>Mode of Travel</Label>
+            <Input
+              name="mode"
+              value={tripForm.mode}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>Outgoing Cost (Rs.)</Label>
+            <Input
+              name="outgoingCost"
+              value={tripForm.outgoingCost}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>Return Cost (Rs.)</Label>
+            <Input
+              name="returnCost"
+              value={tripForm.returnCost}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>Departure Date</Label>
+            <Input
+              type="date"
+              name="startDate"
+              value={tripForm.startDate}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div>
+            <Label>Return Date</Label>
+            <Input
+              type="date"
+              name="endDate"
+              value={tripForm.endDate}
+              onChange={handleTripChange}
+            />
+          </div>
+          <div className="flex items-center space-x-2 col-span-2">
+            <Switch
+              checked={tripForm.gpsEnabled}
+              onCheckedChange={(val) =>
+                setTripForm({ ...tripForm, gpsEnabled: val })
+              }
+            />
+            <Label>Enable GPS Tracking</Label>
+          </div>
+        </div>
+
+        {/* ✅ Capture Start Location */}
+        <CaptureButton
+          label="Start Location"
+          onCapture={() => captureLocation(setTripStartCoords)}
+        />
+
+        <Button className="mt-3 w-full" onClick={handleStartTrip}>
+          🚀 Start Trip
+        </Button>
+      </Card>
+    )}
+
+    {/* Step 2: Ongoing Trip */}
+    {tripState === "inProgress" && (
+      <div className="space-y-6">
+        {/* Current Destinations */}
         <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Trip Details</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Current Trip Destinations
+          </h2>
+          {destinations.length === 0 && <p>No destinations added yet.</p>}
+          {destinations.map((d, idx) => (
+            <Card key={idx} className="p-4 shadow">
+              <p className="font-bold">{d.name}</p>
+              <p>
+                Fare: Rs.{d.transportCost} | Food: Rs.{d.foodCost} | Entry: Rs.
+                {d.entryCost}
+              </p>
+              <p>
+                Arrival: {d.arrivalTime} | Departure: {d.departureTime}
+              </p>
+              <p className="text-gray-500">{d.notes}</p>
+            </Card>
+          ))}
+        </Card>
+
+        {/* Add Destination */}
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold mb-4">➕ Add Destination</h2>
           <div className="grid grid-cols-2 gap-4">
-            <div><Label>From</Label><Input name="from" value={tripForm.from} onChange={handleTripChange} /></div>
-            <div><Label>To</Label><Input name="destination" value={tripForm.destination} onChange={handleTripChange} /></div>
-            <div><Label>Mode of Travel</Label><Input name="mode" value={tripForm.mode} onChange={handleTripChange} /></div>
-            <div><Label>Outgoing Cost (Rs.)</Label><Input name="outgoingCost" value={tripForm.outgoingCost} onChange={handleTripChange} /></div>
-            <div><Label>Return Cost (Rs.)</Label><Input name="returnCost" value={tripForm.returnCost} onChange={handleTripChange} /></div>
-            <div><Label>Departure Date</Label><Input type="date" name="startDate" value={tripForm.startDate} onChange={handleTripChange} /></div>
-            <div><Label>Return Date</Label><Input type="date" name="endDate" value={tripForm.endDate} onChange={handleTripChange} /></div>
-            <div className="flex items-center space-x-2 col-span-2">
-              <Switch checked={tripForm.gpsEnabled} onCheckedChange={(val) => setTripForm({ ...tripForm, gpsEnabled: val })} />
-              <Label>Enable GPS Tracking</Label>
+            <div>
+              <Label>Destination Name</Label>
+              <Input
+                name="name"
+                value={destinationForm.name}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div>
+              <Label>Transportation Fare (Rs.)</Label>
+              <Input
+                name="transportCost"
+                value={destinationForm.transportCost}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div>
+              <Label>Food Cost (Rs.)</Label>
+              <Input
+                name="foodCost"
+                value={destinationForm.foodCost}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div>
+              <Label>Entry Cost (Rs.)</Label>
+              <Input
+                name="entryCost"
+                value={destinationForm.entryCost}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div>
+              <Label>Arrival Time</Label>
+              <Input
+                type="datetime-local"
+                name="arrivalTime"
+                value={destinationForm.arrivalTime}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div>
+              <Label>Departure Time</Label>
+              <Input
+                type="datetime-local"
+                name="departureTime"
+                value={destinationForm.departureTime}
+                onChange={handleDestinationChange}
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Notes</Label>
+              <Textarea
+                name="notes"
+                value={destinationForm.notes}
+                onChange={handleDestinationChange}
+              />
             </div>
           </div>
-          <Button className="mt-3 w-full bg-purple-500" onClick={() => captureLocation(setTripStartCoords)}>
-            📍 Capture Start Location
-          </Button>
-          <Button className="mt-3 w-full" onClick={handleStartTrip}>
-            🚀 Start Trip
+
+          <div className="flex gap-2 mt-4">
+            {/* ✅ Destination Start Capture */}
+            <CaptureButton
+              label="Destination Start"
+              onCapture={() => captureLocation(setDestStartCoords)}
+            />
+
+            {/* ✅ Destination End Capture */}
+            <CaptureButton
+              label="Destination End"
+              onCapture={() => captureLocation(setDestEndCoords)}
+            />
+          </div>
+
+          <Button
+            className="mt-4 w-full bg-orange-500"
+            onClick={handleAddDestination}
+          >
+            ➕ Save Destination
           </Button>
         </Card>
-      )}
 
-      {/* Step 2: Ongoing Trip */}
-      {tripState === "inProgress" && (
-        <div className="space-y-6">
-          {/* Current Destinations */}
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Current Trip Destinations</h2>
-            {destinations.length === 0 && <p>No destinations added yet.</p>}
-            {destinations.map((d, idx) => (
-              <Card key={idx} className="p-4 shadow">
-                <p className="font-bold">{d.name}</p>
-                <p>Fare: Rs.{d.transportCost} | Food: Rs.{d.foodCost} | Entry: Rs.{d.entryCost}</p>
-                <p>Arrival: {d.arrivalTime} | Departure: {d.departureTime}</p>
-                <p className="text-gray-500">{d.notes}</p>
-              </Card>
-            ))}
-          </Card>
+        {/* End Trip */}
+        {/* ✅ Trip End Capture */}
+        <CaptureButton
+          label="Trip End Location"
+          onCapture={() => captureLocation(setTripEndCoords)}
+        />
 
-          {/* Add Destination */}
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">➕ Add Destination</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div><Label>Destination Name</Label><Input name="name" value={destinationForm.name} onChange={handleDestinationChange} /></div>
-              <div><Label>Transportation Fare (Rs.)</Label><Input name="transportCost" value={destinationForm.transportCost} onChange={handleDestinationChange} /></div>
-              <div><Label>Food Cost (Rs.)</Label><Input name="foodCost" value={destinationForm.foodCost} onChange={handleDestinationChange} /></div>
-              <div><Label>Entry Cost (Rs.)</Label><Input name="entryCost" value={destinationForm.entryCost} onChange={handleDestinationChange} /></div>
-              <div><Label>Arrival Time</Label><Input type="datetime-local" name="arrivalTime" value={destinationForm.arrivalTime} onChange={handleDestinationChange} /></div>
-              <div><Label>Departure Time</Label><Input type="datetime-local" name="departureTime" value={destinationForm.departureTime} onChange={handleDestinationChange} /></div>
-              <div className="col-span-2"><Label>Notes</Label><Textarea name="notes" value={destinationForm.notes} onChange={handleDestinationChange} /></div>
-            </div>
-            <div className="flex gap-2 mt-4">
-              <Button className="w-1/2 bg-purple-500" onClick={() => captureLocation(setDestStartCoords)}>📍 Capture Start</Button>
-              <Button className="w-1/2 bg-purple-700" onClick={() => captureLocation(setDestEndCoords)}>📍 Capture End</Button>
-            </div>
-            <Button className="mt-4 w-full bg-orange-500" onClick={handleAddDestination}>
-              ➕ Save Destination
-            </Button>
-          </Card>
+        <Button className="w-full bg-green-600 mt-3" onClick={handleEndTrip}>
+          ✅ End Trip
+        </Button>
+      </div>
+    )}
 
-          {/* End Trip */}
-          <Button className="w-full bg-purple-600" onClick={() => captureLocation(setTripEndCoords)}>
-            📍 Capture Trip End Location
-          </Button>
-          <Button className="w-full bg-green-600 mt-3" onClick={handleEndTrip}>
-            ✅ End Trip
-          </Button>
-        </div>
-      )}
-
-      {/* Step 3: Completed */}
-      {tripState === "completed" && (
-        <Card className="p-6 text-center">
-          <h2 className="text-xl font-bold mb-4 text-green-600">🎉 Trip Completed!</h2>
-          <p>View your expense summary in Firestore.</p>
-        </Card>
-      )}
-    </div>
-  );
-}
+    {/* Step 3: Completed */}
+    {tripState === "completed" && (
+      <Card className="p-6 text-center">
+        <h2 className="text-xl font-bold mb-4 text-green-600">
+          🎉 Trip Completed!
+        </h2>
+        <p>View your expense summary in Firestore.</p>
+      </Card>
+    )}
+  </div>
+);}
