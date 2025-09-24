@@ -28,14 +28,17 @@ export default function Auth() {
     try {
       if (activeTab === 'signin') {
         await signIn(email, password);
+        // Navigate based on email - if contains 'official', go to official dashboard
+        const role = email.includes('official') ? 'official' : 'traveler';
+        navigate(role === 'official' ? '/official/dashboard' : '/traveler/dashboard');
       } else {
         if (password !== confirmPassword) {
           throw new Error('Passwords do not match');
         }
         await signUp(email, password, selectedRole);
+        // Navigate based on selected role
+        navigate(selectedRole === 'official' ? '/official/dashboard' : '/traveler/dashboard');
       }
-      
-      // Navigation will be handled by auth context
     } catch (error) {
       console.error('Auth error:', error);
     } finally {
