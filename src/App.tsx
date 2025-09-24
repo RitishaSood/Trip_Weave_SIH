@@ -48,7 +48,7 @@ function AppRoutes() {
     );
   }
 
-  // If user is authenticated but has no role, redirect to landing
+  // If user is authenticated but has no role, redirect to landing (should not happen in demo mode)
   if (user && !profile?.role) {
     return (
       <Routes>
@@ -78,81 +78,45 @@ function AppRoutes() {
           {/* Traveler routes */}
           <Route 
             path="/traveler/dashboard" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <TravelerDashboard />
-              </ProtectedRoute>
-            } 
+            element={<TravelerDashboard />}
           />
           
           {/* Official routes */}
           <Route 
             path="/official/dashboard" 
-            element={
-              <ProtectedRoute requiredRole="official">
-                <OfficialDashboard />
-              </ProtectedRoute>
-            } 
+            element={<OfficialDashboard />}
           />
 
           {/* Shared traveler features */}
           <Route 
             path="/trip-planner" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <TripPlanner />
-              </ProtectedRoute>
-            } 
+            element={<TripPlanner />}
           />
           <Route 
             path="/itinerary" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <Itinerary />
-              </ProtectedRoute>
-            } 
+            element={<Itinerary />}
           />
           <Route 
             path="/rides" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <Rides />
-              </ProtectedRoute>
-            } 
+            element={<Rides />}
           />
           <Route 
             path="/food" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <Food />
-              </ProtectedRoute>
-            } 
+            element={<Food />}
           />
           <Route 
             path="/safety" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <Safety />
-              </ProtectedRoute>
-            } 
+            element={<Safety />}
           />
           <Route 
             path="/trip-logger" 
-            element={
-              <ProtectedRoute requiredRole="traveler">
-                <TripLogger />
-              </ProtectedRoute>
-            } 
+            element={<TripLogger />}
           />
 
           {/* Profile accessible to both roles */}
           <Route 
             path="/profile" 
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } 
+            element={<Profile />}
           />
 
           {/* Fallback */}

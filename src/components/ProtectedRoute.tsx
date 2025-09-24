@@ -22,16 +22,14 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
     );
   }
 
+  // For demo mode, just check if user exists
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (!profile?.role) {
-    return <Navigate to="/" replace />;
-  }
-
-  if (requiredRole && profile.role !== requiredRole) {
-    const redirectPath = profile.role === 'traveler' ? '/traveler/dashboard' : '/official/dashboard';
+  // For demo mode, allow access regardless of role if no specific role required
+  if (requiredRole && profile?.role !== requiredRole) {
+    const redirectPath = profile?.role === 'traveler' ? '/traveler/dashboard' : '/official/dashboard';
     return <Navigate to={redirectPath} replace />;
   }
 

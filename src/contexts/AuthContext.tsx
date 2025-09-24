@@ -1,17 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import React, { createContext, useContext, useState } from 'react';
 import { toast } from 'sonner';
 
-// Temporary type definitions until database is set up
-interface DatabaseProfile {
+// Simple demo user type
+interface DemoUser {
   id: string;
   email: string;
-  role: 'traveler' | 'official' | null;
-  full_name?: string;
-  avatar_url?: string;
-  created_at: string;
-  updated_at: string;
 }
 
 interface Profile {
@@ -23,7 +16,7 @@ interface Profile {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: DemoUser | null;
   profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
@@ -35,96 +28,56 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<DemoUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        await fetchProfile(session.user.id);
-      } else {
-        setProfile(null);
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const fetchProfile = async (userId: string) => {
-    try {
-      // Temporary mock data until database is set up
-      const mockProfile: Profile = {
-        id: userId,
-        email: user?.email || '',
-        role: 'traveler', // Default role for now
-        full_name: 'Test User',
-      };
-
-      setProfile(mockProfile);
-    } catch (error) {
-      console.error('Error in fetchProfile:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Demo authentication - always succeeds with demo user
+    const demoUser: DemoUser = {
+      id: 'demo-user-' + Date.now(),
+      email: email,
+    };
 
-    if (error) {
-      toast.error(error.message);
-      throw error;
-    }
+    // Determine role based on email or default to traveler
+    const role = email.includes('official') ? 'official' : 'traveler';
+    
+    const demoProfile: Profile = {
+      id: demoUser.id,
+      email: email,
+      role: role,
+      full_name: `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
+    };
 
+    setUser(demoUser);
+    setProfile(demoProfile);
+    
     toast.success('Successfully signed in!');
   };
 
   const signUp = async (email: string, password: string, role: 'traveler' | 'official') => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    // Demo signup - create demo user with specified role
+    const demoUser: DemoUser = {
+      id: 'demo-user-' + Date.now(),
+      email: email,
+    };
+    
+    const demoProfile: Profile = {
+      id: demoUser.id,
+      email: email,
+      role: role,
+      full_name: `Demo ${role === 'official' ? 'Official' : 'Traveler'}`,
+    };
 
-    if (error) {
-      toast.error(error.message);
-      throw error;
-    }
+    setUser(demoUser);
+    setProfile(demoProfile);
 
-    // Temporary: Set role in local profile until database is set up
-    // In production, this would update the database
-    console.log('User role will be:', role);
-
-    toast.success('Account created successfully! Please check your email for verification.');
+    toast.success('Account created successfully!');
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    
-    if (error) {
-      toast.error(error.message);
-      throw error;
-    }
-
+    setUser(null);
+    setProfile(null);
     toast.success('Successfully signed out!');
   };
 
